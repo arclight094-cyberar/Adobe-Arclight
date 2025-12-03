@@ -17,13 +17,13 @@ interface ActionButtonProps {
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({ icon, title, onClick }) => {
-  const { colors } = useTheme();
+  const { isDark } = useTheme();
   
   return (
-    <TouchableOpacity onPress={onClick} style={[styles.button, { backgroundColor: colors.background.button }]}>
+    <TouchableOpacity onPress={onClick} style={[styles.button, { backgroundColor: isDark ? '#E8E5D8' : '#3A3A3A' }]}>
       <View style={styles.buttonInner}>
         <View style={styles.iconContainer}>{icon}</View>
-        <Text style={[styles.buttonText, { color: colors.text.cream }]}>{title}</Text>
+        <Text style={[styles.buttonText, { color: isDark ? '#1A1A1A' : '#FFFFFF' }]}>{title}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -31,7 +31,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, title, onClick }) => 
 
 const Home: React.FC = () => {
   const [uploading, setUploading] = useState(false);
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
 
   // ===================== UPLOAD IMAGE AND CREATE PROJECT =====================
   const handleImageSelected = async (uri: string, source: 'gallery' | 'camera') => {
@@ -128,7 +128,7 @@ const Home: React.FC = () => {
   // ===================== BUTTONS =====================
   const actionButtons = [
     {
-      icon: <Plus size={48} strokeWidth={2.5} color={colors.text.cream} />,
+      icon: <Plus size={48} strokeWidth={2.5} color={isDark ? '#1A1A1A' : '#FFFFFF'} />,
       title: "NEW\nPROJECT",
       onClick: openGallery,
     },
@@ -138,14 +138,14 @@ const Home: React.FC = () => {
     //   onClick: openCamera,
     // },
     {
-      icon: <Folder size={48} strokeWidth={2.5} color={colors.text.cream} />,
+      icon: <Folder size={48} strokeWidth={2.5} color={isDark ? '#1A1A1A' : '#FFFFFF'} />,
       title: "PROJECT\nGALLERY",
       onClick: () => router.push("/(app)/projects"),
     },
   ];
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background.cream }]}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: isDark ? '#1A1A1A' : '#E8E5D8' }]}>
       <Navbar screenName="HOME" />
 
       {uploading && (
