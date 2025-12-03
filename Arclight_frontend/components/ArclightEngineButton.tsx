@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Sparkles } from 'lucide-react-native';
+import { useTheme } from '../context/ThemeContext';
 
 interface ArclightEngineButtonProps {
   onPress: () => void;
@@ -12,6 +13,8 @@ export default function ArclightEngineButton({
   onPress,
   disabled = false,
 }: ArclightEngineButtonProps) {
+  const { colors } = useTheme();
+  
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -19,18 +22,18 @@ export default function ArclightEngineButton({
       disabled={disabled}
     >
       <LinearGradient
-        colors={['#1A2340', '#000000', '#0D1525', '#1A2340']}
+        colors={[colors.button.gradient1, colors.button.gradient2, colors.button.gradient3, colors.button.gradient1]}
         locations={[0, 0.3, 0.7, 1]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.engineButton}
+        style={[styles.engineButton, { shadowColor: colors.lighting.shadow }]}
       >
-        <View style={styles.engineButtonOverlay} />
+        <View style={[styles.engineButtonOverlay, { backgroundColor: colors.background.buttonHover }]} />
         <View style={styles.engineButtonContent}>
-          <Sparkles size={24} color="#FFF" strokeWidth={2} />
+          <Sparkles size={24} color={colors.icon.white} strokeWidth={2} />
           <View style={styles.engineButtonTextContainer}>
-            <Text style={styles.engineButtonText}>Arclight</Text>
-            <Text style={styles.engineButtonSubtext}>Engine</Text>
+            <Text style={[styles.engineButtonText, { color: colors.text.light }]}>Arclight</Text>
+            <Text style={[styles.engineButtonSubtext, { color: colors.text.light }]}>Engine</Text>
           </View>
         </View>
       </LinearGradient>
@@ -43,7 +46,6 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 24,
     overflow: 'hidden',
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: -8,
@@ -60,7 +62,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: '50%',
-    backgroundColor: 'rgba(24, 23, 23, 0.05)',
   },
   engineButtonContent: {
     flexDirection: 'row',
@@ -77,13 +78,11 @@ const styles = StyleSheet.create({
   engineButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
     lineHeight: 20,
   },
   engineButtonSubtext: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#FFF',
     lineHeight: 16,
   },
 });

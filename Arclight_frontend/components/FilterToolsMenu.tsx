@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Sun, Contrast, Droplet, Palette, Moon, CircleHelp, Aperture } from 'lucide-react-native';
 import { FilterValues } from '../utils/filters';
+import { useTheme } from '../context/ThemeContext';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const ICON_WIDTH = 90;
@@ -47,6 +48,7 @@ export default function FilterToolsMenu({
 }: FilterToolsMenuProps) {
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
+  const { colors } = useTheme();
 
   // ⭐ KEY FIX: Use ref to track current selected index for PanResponder
   const selectedToolIndexRef = useRef(0);
@@ -252,20 +254,20 @@ export default function FilterToolsMenu({
     return (
       <View style={styles.filterIconWrapper}>
         <View style={[
-          styles.filterIconCircle,
-          hasValue && styles.filterIconCircleActive,
+          [styles.filterIconCircle, { backgroundColor: colors.background.dark }],
+          hasValue && [styles.filterIconCircleActive, { backgroundColor: colors.special.filter }],
         ]}>
           <IconComponent
             size={36}
-            color="#FFF"
+            color={colors.icon.white}
             strokeWidth={1.8}
           />
         </View>
         {!isActive && (
-          <View style={styles.filterIconBlurOverlay} />
+          <View style={[styles.filterIconBlurOverlay, { backgroundColor: colors.special.filterOverlay }]} />
         )}
         {hasValue && (
-          <View style={styles.filterValueIndicator} />
+          <View style={[styles.filterValueIndicator, { backgroundColor: colors.button.arclight, borderColor: colors.lighting.background }]} />
         )}
       </View>
     );
@@ -283,11 +285,11 @@ export default function FilterToolsMenu({
       />
 
       {/* Bottom Sheet */}
-      <View style={styles.filterMenuContainer}>
+      <View style={[styles.filterMenuContainer, { backgroundColor: colors.lighting.background }]}>
         {/* SLIDER SECTION */}
         <View style={styles.filterSliderSection}>
           <View style={styles.sliderRow}>
-            <Text style={styles.sliderMinLabel}>-50</Text>
+            <Text style={[styles.sliderMinLabel, { color: colors.text.primary }]}>-50</Text>
 
             <View
               style={styles.sliderTrackWrapper}
@@ -304,8 +306,8 @@ export default function FilterToolsMenu({
               }}
               {...sliderPanResponder.panHandlers}
             >
-              <View style={styles.sliderTrack} />
-              <View style={styles.sliderCenterTick} />
+              <View style={[styles.sliderTrack, { backgroundColor: colors.text.primary }]} />
+              <View style={[styles.sliderCenterTick, { backgroundColor: colors.text.secondary }]} />
 
               <Animated.View
                 style={[
@@ -313,15 +315,15 @@ export default function FilterToolsMenu({
                   { transform: [{ translateX: Animated.subtract(sliderThumbPos, 30) }] }
                 ]}
               >
-                <Text style={styles.sliderValueText}>{sliderValue}</Text>
-                <View style={styles.sliderThumb} />
+                <Text style={[styles.sliderValueText, { color: colors.text.primary }]}>{sliderValue}</Text>
+                <View style={[styles.sliderThumb, { backgroundColor: colors.special.filter }]} />
               </Animated.View>
             </View>
 
-            <Text style={styles.sliderMaxLabel}>50</Text>
+            <Text style={[styles.sliderMaxLabel, { color: colors.text.primary }]}>50</Text>
           </View>
 
-          <Text style={styles.filterToolLabel}>
+          <Text style={[styles.filterToolLabel, { color: colors.text.primary }]}>
             {filterTools[selectedToolIndex]?.label.toUpperCase()}
           </Text>
         </View>
@@ -364,7 +366,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#E8E8E8',
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     paddingTop: 20,
@@ -383,14 +384,12 @@ const styles = StyleSheet.create({
   sliderMinLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a1a1a',
     width: 40,
     textAlign: 'center',
   },
   sliderMaxLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a1a1a',
     width: 40,
     textAlign: 'center',
   },
@@ -403,7 +402,6 @@ const styles = StyleSheet.create({
   },
   sliderTrack: {
     height: 2,
-    backgroundColor: '#1a1a1a',
     borderRadius: 1,
   },
   sliderCenterTick: {
@@ -414,7 +412,6 @@ const styles = StyleSheet.create({
     marginTop: -6,
     width: 2,
     height: 12,
-    backgroundColor: '#888',
   },
   sliderThumbWrapper: {
     position: 'absolute',
@@ -425,19 +422,16 @@ const styles = StyleSheet.create({
   sliderValueText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a1a1a',
     marginBottom: 6,
   },
   sliderThumb: {
     width: 6,
     height: 48,
-    backgroundColor: '#4A4E8D',
     borderRadius: 3,
   },
   filterToolLabel: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a1a1a',
     textAlign: 'center',
     marginTop: 12,
     letterSpacing: 1,
@@ -465,10 +459,8 @@ const styles = StyleSheet.create({
     borderRadius: 38,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
   },
   filterIconCircleActive: {
-    backgroundColor: '#4A4E8D',
   },
   filterIconBlurOverlay: {
     position: 'absolute',
@@ -477,7 +469,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     borderRadius: 38,
-    backgroundColor: 'rgba(232, 232, 232, 0.7)',
   },
   filterValueIndicator: {
     position: 'absolute',
@@ -486,8 +477,6 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#4A90E2',
     borderWidth: 2,
-    borderColor: '#E8E8E8',
   },
 });

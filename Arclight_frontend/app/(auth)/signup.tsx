@@ -20,6 +20,7 @@ import * as AuthSession from 'expo-auth-session';
 import Constants from 'expo-constants';
 import apiService from '../../services/api';
 import { API_BASE_URL } from '../../constants/api';
+import { useTheme } from '../../context/ThemeContext';
 
 // Complete the auth session
 WebBrowser.maybeCompleteAuthSession();
@@ -27,6 +28,7 @@ WebBrowser.maybeCompleteAuthSession();
 const { width, height } = Dimensions.get('window');
 
 export default function SignupScreen() {
+  const { colors } = useTheme();
   const [isSignIn, setIsSignIn] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -283,19 +285,14 @@ export default function SignupScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <SafeAreaView style={[styles.safeContainer, { backgroundColor: colors.auth.background }]}>
       {/* Changed from ScrollView to View */}
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.auth.background }]}>
         <View style={styles.imageSection}>
-          {/* <Image
-          source={{
-            uri: 'https://images.pexels.com/photos/3785927/pexels-photo-3785927.jpeg?auto=compress&cs=tinysrgb&w=1600',
-          }}
-          style={styles.backgroundImage}
-          blurRadius={3}
-        /> */}
-
-          <View style={styles.blackBackground} />
+          <Image
+            source={require('../../assets/images/arclight_auth_image.jpg')}
+            style={styles.backgroundImage}
+          />
           <View style={styles.overlay} />
           <View style={styles.logoOverlay}>
             <Svg width={100} height={100} viewBox="0 0 707.9 631.64">
@@ -303,16 +300,16 @@ export default function SignupScreen() {
                 <Path
                   d="M856.46,719.56,722.79,488,558.61,772.39a12.25,12.25,0,0,1-.78,1.36l0,.07h0a14.85,14.85,0,0,1-5,4.65l-79.9,46.13H795.82C849.73,824.6,883.42,766.24,856.46,719.56Z"
                   transform="translate(-158.05 -192.95)"
-                  fill="#ffffff"
+                  fill={colors.auth.svg}
                 />
                 <Path
                   d="M427.8,706.3a14.71,14.71,0,0,1,1.54-6.63h0l0,0a13.16,13.16,0,0,1,.84-1.46l207-358.46L572.64,228c-26.95-46.69-94.33-46.69-121.28,0L167.54,719.56c-27,46.68,6.73,105,60.64,105H427.8Z"
                   transform="translate(-158.05 -192.95)"
-                  fill="#ffffffff"
+                  fill={colors.auth.svg}
                 />
               </G>
             </Svg>
-            <Text style={[styles.logoText, { fontFamily: "geistmono" }]}>
+            <Text style={[styles.logoText, { fontFamily: "geistmono", color: colors.auth.text }]}>
               arclight
             </Text>
           </View>
@@ -324,84 +321,79 @@ export default function SignupScreen() {
           {/* This wrapper ensures the header/buttons stay at the top */}
           <View style={styles.topContentWrapper}>
             <View style={styles.headerContainer}>
-              <Text style={[styles.title, {fontFamily: "geistmono"}]}>
-                {isSignIn ? 'Welcome Back' : 'Get Started'}
-              </Text>
-              <Text style={[styles.subtitle, {fontFamily: "geistmono"}]}>
-                {isSignIn
-                  ? 'Log in to continue with us'
-                  : 'Create your account to begin'}
+              <Text style={[styles.title, {fontFamily: "geistmono", color: colors.auth.text}]}>
+                WELCOME TO ARCLIGHT.
               </Text>
             </View>
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                style={[styles.authButton, googleLoading && styles.authButtonDisabled]}
+                style={[styles.authButton, styles.outlineButton, { backgroundColor: colors.auth.input, borderColor: colors.auth.inputBorder }, googleLoading && styles.authButtonDisabled]}
                 onPress={handleGoogleAuth}
                 activeOpacity={0.8}
                 disabled={googleLoading || !request}
               >
                 {googleLoading ? (
-                  <ActivityIndicator color="#ffffff" size="small" />
+                  <ActivityIndicator color={colors.auth.textDark} size="small" />
                 ) : (
                   <Svg width={20} height={20} viewBox="0 0 24 24">
                     <Path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                      fill="#ffffffff"
+                      fill={colors.auth.textDark}
                     />
                     <Path
                       d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                      fill="#ffffff"
+                      fill={colors.auth.textDark}
                     />
                     <Path
                       d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                      fill="#ffffff"
+                      fill={colors.auth.textDark}
                     />
                     <Path
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                      fill="#ffffff"
+                      fill={colors.auth.textDark}
                     />
                   </Svg>
                 )}
-                <Text style={styles.buttonText}>
+                <Text style={[styles.buttonText, { color: colors.auth.textDark }]}>
                   {googleLoading ? 'Signing in...' : 'Continue with Google'}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.authButton}
+                style={[styles.authButton, styles.outlineButton, { backgroundColor: colors.auth.input, borderColor: colors.auth.inputBorder }]}
                 onPress={handleAdobeAuth}
                 activeOpacity={0.8}
               >
                 <Svg width={20} height={20} viewBox="0 0 24 24">
-                  <Path d="M13.966 22.624l-1.69-4.281H8.122l3.892-9.144 5.662 13.425zM8.884 1.376H0v21.248zm15.116 0h-8.884L24 22.624Z" fill="#ffffffff" />
+                  <Path d="M13.966 22.624l-1.69-4.281H8.122l3.892-9.144 5.662 13.425zM8.884 1.376H0v21.248zm15.116 0h-8.884L24 22.624Z" fill={colors.auth.textDark} />
                 </Svg>
-                <Text style={styles.buttonText}>Continue with Adobe</Text>
+                <Text style={[styles.buttonText, { color: colors.auth.textDark }]}>Continue with Adobe</Text>
               </TouchableOpacity>
-              
-              {/* ===== NEW "OR" DIVIDER ===== */}  
+
+              {/* ===== OR DIVIDER ===== */}  
               <View style={styles.dividerContainer}>
-                <View style={styles.divider} />
-                <Text style={styles.dividerText}>OR</Text>
-                <View style={styles.divider} />
+                <View style={[styles.divider, { backgroundColor: colors.auth.divider }]} />
+                <Text style={[styles.dividerText, { color: colors.auth.text }]}>OR</Text>
+                <View style={[styles.divider, { backgroundColor: colors.auth.divider }]} />
               </View>
 
               <TouchableOpacity
-                style={styles.authButton}
+                style={[styles.authButton, styles.emailButton, { backgroundColor: colors.auth.button }]}
                 onPress={handleEmailAuth}
                 activeOpacity={0.8}
               >
-                <Mail size={20} color="#ffffff" />
-                <Text style={styles.buttonText}>Continue with Email</Text>
+                <Mail size={20} color={colors.auth.text} />
+                <Text style={[styles.buttonText, styles.emailButtonText, { color: colors.auth.text }]}>Continue with Email</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.signInToggleContainer}>
-              <Text style={styles.toggleBaseText}>
+              <Text style={[styles.toggleBaseText, { color: colors.auth.textGray }]}>
                 {isSignIn ? "Don't have an account? " : 'Already have an account? '}
               </Text>
               <TouchableOpacity onPress={handleToggleSignIn} activeOpacity={0.7}>
-                <Text style={styles.toggleLinkText}>
+                <Text style={[styles.toggleLinkText, { color: colors.auth.text }]}>
                   {isSignIn ? 'Sign Up' : 'Log in'}
                 </Text>
               </TouchableOpacity>
@@ -409,12 +401,12 @@ export default function SignupScreen() {
           </View>
           
           {/* This footer will be pushed to the bottom */}
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
+          <View style={[styles.footer, { borderTopColor: colors.auth.divider }]}>
+            <Text style={[styles.footerText, { color: colors.auth.textLight }]}>
               By continuing, you agree to our{' '}
-              <Text style={styles.footerLink}>Terms of Service</Text>
+              <Text style={[styles.footerLink, { color: colors.auth.text }]}>Terms of Service</Text>
               {' '}and{' '}
-              <Text style={styles.footerLink}>Privacy Policy</Text>
+              <Text style={[styles.footerLink, { color: colors.auth.text }]}>Privacy Policy</Text>
             </Text>
           </View>
         </View>
@@ -426,11 +418,9 @@ export default function SignupScreen() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: '#141414',
   },
   container: {
     flex: 1, // This makes the View fill the SafeAreaView
-    backgroundColor: '#ffffffff',
   },
   imageSection: {
     width: '100%',
@@ -449,7 +439,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(20, 20, 20, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   logoOverlay: {
     position: 'absolute',
@@ -463,7 +453,6 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 24,
     fontWeight: '300',
-    color: '#ffffff',
     letterSpacing: 4,
     marginTop: 12,
   },
@@ -487,24 +476,25 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginBottom: 24, // Reduced from 32
-    paddingLeft:16,
+    paddingHorizontal: 16,
     // DEBUG BORDER (black)
     // borderWidth: 1,
     // borderColor: 'black',
   },
   title: {
-    fontSize: 28,
-    fontWeight:'900',
-    color: '#141414',
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 24,
     fontFamily: 'geistmono',
+    textAlign: 'center',
+    letterSpacing: 1,
   },
   subtitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#3a3a3aff',
-    lineHeight: 22,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 20,
     fontFamily: 'geistmono',
+    textAlign: 'center',
   },
   buttonContainer: {
     gap: 12,
@@ -519,36 +509,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     paddingHorizontal: 24,
-    backgroundColor: '#141414',
     borderRadius: 28,
     gap: 12,
+  },
+  outlineButton: {
+    borderWidth: 1,
   },
   authButtonDisabled: {
     opacity: 0.6,
   },
+  emailButton: {
+  },
+  emailButtonText: {
+  },
   buttonText: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#ffffff',
     fontFamily: 'geistmono',
   },
 
-  // ===== "OR" DIVIDER STYLES (RE-ADDED) =====
+  // ===== OR DIVIDER STYLES =====
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 0, // Adjusted spacing for inside the button list
-    gap: 6,
+    marginVertical: 0,
+    gap: 8,
   },
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: '#e0e0e0',
   },
   dividerText: {
     fontSize: 13,
-    color: '#999999',
-    fontWeight: '400',
+    fontWeight: '500',
     fontFamily: 'geistmono',
   },
 
@@ -565,46 +558,31 @@ const styles = StyleSheet.create({
   },
   toggleBaseText: {
     fontSize: 13,
-    color: '#999999',
     fontWeight: '400',
     fontFamily: 'geistmono',
   },
   toggleLinkText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#141414',
     marginLeft: 2,
     fontFamily: 'geistmono',
   },
 
   // ===== FOOTER STYLES =====
   footer: {
-    // No margin-top needed, justifyContent: 'space-between' handles it
-    paddingTop: 8, // Reduced from 24
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    // DEBUG BORDER (black)
-    // borderWidth: 1,
-    // borderColor: 'black',
+    paddingTop: 8,
+    borderTopWidth: 0,
     marginBottom: 6,
   },
   footerText: {
     fontSize: 10,
-    color: '#999999',
     lineHeight: 17,
     textAlign: 'center',
     fontFamily: 'geistmono',
   },
   footerLink: {
-    color: '#141414',
     fontWeight: '500',
     fontFamily: 'geistmono',
   },
-
-  blackBackground: {
-    height: '100%',
-    backgroundColor: '#141414',
-    width: '100%',
-  }
 });
 

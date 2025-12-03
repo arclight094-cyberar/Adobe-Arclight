@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -27,12 +27,34 @@ const SIDEBAR_WIDTH = 288;
 const EDGE_SWIPE_WIDTH = 24;
 const SWIPE_THRESHOLD = 45;
 
+interface UserData {
+  name: string;
+  email: string;
+}
+
 export default function Sidebar() {
   const router = useRouter();
   const { isOpen, openSidebar, closeSidebar } = useSidebar();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark, toggleTheme, colors } = useTheme();
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const translateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
+
+  // Load user data from AsyncStorage
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userDataString = await AsyncStorage.getItem('user_data');
+        if (userDataString) {
+          const user = JSON.parse(userDataString);
+          setUserData(user);
+        }
+      } catch (error) {
+        console.error('Error loading user data:', error);
+      }
+    };
+    loadUserData();
+  }, []);
 
   useEffect(() => {
     Animated.spring(translateX, {
@@ -130,21 +152,21 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Backdrop overlay */}
+      {/* OVERLAY */}
       {isOpen && (
         <TouchableWithoutFeedback onPress={closeSidebar}>
-          <View style={styles.overlay} />
+          <View style={[styles.overlay, { backgroundColor: colors.background.overlay }]} />
         </TouchableWithoutFeedback>
       )}
 
       {/* SIDEBAR */}
       <Animated.View
-        style={[styles.sidebar, { transform: [{ translateX }] }]}
+        style={[styles.sidebar, { transform: [{ translateX }], backgroundColor: isDark ? '#E8E5D8' : '#000000' }]}
         {...sidebarPanResponder.panHandlers}
       >
         <SafeAreaView style={styles.safeArea}>
           {/* HEADER */}
-          <View style={styles.header}>
+          <View style={[styles.header, { borderBottomColor: isDark ? '#D0CDB8' : '#1A1A1A' }]}>
             <View style={styles.profileSection}>
               <View style={styles.profileImageContainer}>
                 <Image
@@ -157,13 +179,17 @@ export default function Sidebar() {
               </View>
 
               <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>Arclighter</Text>
-                <Text style={styles.profileEmail}>xyz@ijk.com</Text>
+                <Text style={[styles.profileName, { color: isDark ? '#1A1A1A' : '#FFFFFF' }]}>
+                  {userData?.name || 'Arclighter'}
+                </Text>
+                <Text style={[styles.profileEmail, { color: isDark ? '#666666' : '#B0B0B0' }]}>
+                  {userData?.email || 'xyz@ijk.com'}
+                </Text>
               </View>
             </View>
 
             <Pressable style={styles.closeButton} onPress={closeSidebar}>
-              <Feather name="sidebar" size={36} color="white" />
+              <Feather name="sidebar" size={36} color={isDark ? '#1A1A1A' : '#FFFFFF'} />
             </Pressable>
           </View>
 
@@ -178,18 +204,18 @@ export default function Sidebar() {
                 onPress={() => navigate(item.path)}
                 style={({ pressed }) => [
                   styles.menuItem,
-                  pressed && styles.menuItemPressed,
+                  pressed && [styles.menuItemPressed, { backgroundColor: isDark ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.1)' }],
                 ]}
               >
-                <Feather name={item.icon as any} size={24} color="white" />
-                <Text style={styles.menuLabel}>{item.label}</Text>
+                <Feather name={item.icon as any} size={24} color={isDark ? '#1A1A1A' : '#FFFFFF'} />
+                <Text style={[styles.menuLabel, { color: isDark ? '#1A1A1A' : '#FFFFFF' }]}>{item.label}</Text>
               </Pressable>
             ))}
 
             {/* PREMIUM */}
             <Pressable style={styles.menuItem}>
-              <Crown size={24} color="#60A5FA" strokeWidth={2.5} />
-              <Text style={[styles.menuLabel, styles.premiumLabel]}>
+              <Crown size={24} color={colors.special.premium} strokeWidth={2.5} />
+              <Text style={[styles.menuLabel, { color: colors.special.premium }]}>
                 PREMIUM
               </Text>
             </Pressable>
@@ -199,12 +225,12 @@ export default function Sidebar() {
               onPress={handleLogout}
               style={({ pressed }) => [
                 styles.menuItem,
-                styles.logoutItem,
-                pressed && styles.menuItemPressed,
+                [styles.logoutItem, { borderTopColor: isDark ? '#D0CDB8' : '#1A1A1A' }],
+                pressed && [styles.menuItemPressed, { backgroundColor: isDark ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.1)' }],
               ]}
             >
-              <Feather name="log-out" size={24} color="#EF4444" />
-              <Text style={[styles.menuLabel, styles.logoutLabel]}>
+              <Feather name="log-out" size={24} color={colors.special.logout} />
+              <Text style={[styles.menuLabel, { color: colors.special.logout }]}>
                 LOGOUT
               </Text>
             </Pressable>
@@ -212,18 +238,18 @@ export default function Sidebar() {
           </ScrollView>
 
           {/* THEME TOGGLE */}
-          <View style={styles.footer}>
+          <View style={[styles.footer, { borderTopColor: isDark ? '#D0CDB8' : '#1A1A1A' }]}>
             <Feather
               name="sun"
               size={24}
-              color={isDark ? "#6B7280" : "#FBBF24"}
+              color={isDark ? colors.special.yellow : '#808080'}
             />
 
             <Pressable
               onPress={toggleTheme}
               style={[
                 styles.toggleSwitch,
-                isDark ? styles.toggleOn : styles.toggleOff,
+                { backgroundColor: isDark ? '#3C44A8' : '#3A3A3A' },
               ]}
             >
               <View
@@ -237,7 +263,7 @@ export default function Sidebar() {
             <Feather
               name="moon"
               size={24}
-              color={isDark ? "#93C5FD" : "#6B7280"}
+              color={isDark ? '#1A1A1A' : '#60A5FA'}
             />
           </View>
         </SafeAreaView>
@@ -259,7 +285,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0,0,0,0.5)",
     zIndex: 40,
   },
   sidebar: {
@@ -268,7 +293,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: SIDEBAR_WIDTH,
-    backgroundColor: "#000",
     borderTopRightRadius: 40,
     borderBottomRightRadius: 40,
     elevation: 10,
@@ -285,6 +309,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     flexDirection: "row",
     justifyContent: "space-between",
+    borderBottomWidth: 1,
   },
   profileSection: {
     flex: 1,
@@ -298,8 +323,8 @@ const styles = StyleSheet.create({
   },
   profileImage: { width: "100%", height: "100%" },
   profileInfo: { gap: 2 },
-  profileName: { fontSize: 20, fontWeight: "bold", color: "white", fontFamily: "geistmono" },
-  profileEmail: { fontSize: 12, color: "#9CA3AF", fontFamily: "geistmono" },
+  profileName: { fontSize: 20, fontWeight: "bold", fontFamily: "geistmono" },
+  profileEmail: { fontSize: 12, fontFamily: "geistmono" },
   closeButton: { padding: 6 },
 
   /* MENU */
@@ -312,17 +337,13 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   menuItemPressed: {
-    backgroundColor: "rgba(255,255,255,0.05)",
   },
-  menuLabel: { fontSize: 16, fontWeight: "600", color: "white", fontFamily: "geistmono" },
-  premiumLabel: { color: "#60A5FA" },
+  menuLabel: { fontSize: 16, fontWeight: "600", fontFamily: "geistmono" },
   logoutItem: {
     marginTop: 8,
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.1)",
     paddingTop: 20,
   },
-  logoutLabel: { color: "#EF4444" },
 
   /* FOOTER */
   footer: {
@@ -331,6 +352,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 16,
+    borderTopWidth: 1,
   },
 
   toggleSwitch: {
@@ -338,12 +360,6 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 16,
     justifyContent: "center",
-  },
-  toggleOn: {
-    backgroundColor: "#D1D5DB",
-  },
-  toggleOff: {
-    backgroundColor: "#374151",
   },
   toggleThumb: {
     width: 24,
