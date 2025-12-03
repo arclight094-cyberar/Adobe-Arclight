@@ -36,7 +36,7 @@ export default function Projects() {
   const [searchQuery, setSearchQuery] = useState('');
   const [projects] = useState<Project[]>(initialProjects);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
 
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -59,7 +59,7 @@ export default function Projects() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background.cream }]} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#1A1A1A' : '#E8E5D8' }]} edges={['top']}>
       <Navbar screenName="PROJECTS" />
 
       {/* BACKDROP when menu open */}
@@ -72,12 +72,12 @@ export default function Projects() {
       )}
 
       {/* SEARCH BAR */}
-      <View style={[styles.searchContainer, { backgroundColor: colors.input.background, borderColor: colors.input.border, borderWidth: 1 }]}>
-        <Feather name="search" size={20} color={colors.icon.default} style={styles.searchIcon} />
+      <View style={[styles.searchContainer, { backgroundColor: isDark ? '#2A2A2A' : '#FFFFFF', borderColor: isDark ? '#3A3A3A' : '#D0CDB8', borderWidth: 1 }]}>
+        <Feather name="search" size={20} color={isDark ? '#B0B0B0' : '#666666'} style={styles.searchIcon} />
         <TextInput
-          style={[styles.searchInput, { color: colors.text.primary }]}
+          style={[styles.searchInput, { color: isDark ? '#FFFFFF' : '#1A1A1A' }]}
           placeholder="Search"
-          placeholderTextColor={colors.input.placeholder}
+          placeholderTextColor={isDark ? '#808080' : '#999999'}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
@@ -102,12 +102,12 @@ export default function Projects() {
                   setOpenMenuId(openMenuId === project.id ? null : project.id)
                 }
               >
-                <Text style={[styles.optionsText, { color: colors.text.secondary }]}>⋮</Text>
+                <Text style={[styles.optionsText, { color: isDark ? '#B0B0B0' : '#666666' }]}>⋮</Text>
               </TouchableOpacity>
 
               {/* Menu itself */}
               {openMenuId === project.id && (
-                <View style={[styles.optionsMenu, { backgroundColor: colors.background.secondary }]}>
+                <View style={[styles.optionsMenu, { backgroundColor: isDark ? '#2A2A2A' : '#FFFFFF' }]}>
                   <TouchableOpacity
                     style={styles.optionItem}
                     onPress={() => {
@@ -115,11 +115,11 @@ export default function Projects() {
                       handleRename(project.id);
                     }}
                   >
-                    <Text style={[styles.optionText, { color: colors.text.primary }]}>Rename</Text>
+                    <Text style={[styles.optionText, { color: isDark ? '#FFFFFF' : '#1A1A1A' }]}>Rename</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={[styles.optionItem, [styles.lastOptionItem, { borderTopColor: colors.border.primary }]]}
+                    style={[styles.optionItem, [styles.lastOptionItem, { borderTopColor: isDark ? '#3A3A3A' : '#E0E0E0' }]]}
                     onPress={() => {
                       setOpenMenuId(null);
                       handleDelete(project.id);
@@ -134,9 +134,9 @@ export default function Projects() {
 
               {/* MAIN CARD */}
               <TouchableOpacity activeOpacity={0.8}>
-                <View style={[styles.projectThumbnail, { backgroundColor: colors.card.thumbnail }]} />
-                <Text style={[styles.projectName, { color: colors.text.primary }]}>{project.name}</Text>
-                <Text style={[styles.projectDate, { color: colors.text.secondary }]}>{project.date}</Text>
+                <View style={[styles.projectThumbnail, { backgroundColor: isDark ? '#E8E5D8' : '#2A2A2A' }]} />
+                <Text style={[styles.projectName, { color: isDark ? '#FFFFFF' : '#1A1A1A' }]}>{project.name}</Text>
+                <Text style={[styles.projectDate, { color: isDark ? '#B0B0B0' : '#666666' }]}>{project.date}</Text>
               </TouchableOpacity>
             </View>
           ))}

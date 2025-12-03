@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -27,12 +27,34 @@ const SIDEBAR_WIDTH = 288;
 const EDGE_SWIPE_WIDTH = 24;
 const SWIPE_THRESHOLD = 45;
 
+interface UserData {
+  name: string;
+  email: string;
+}
+
 export default function Sidebar() {
   const router = useRouter();
   const { isOpen, openSidebar, closeSidebar } = useSidebar();
   const { isDark, toggleTheme, colors } = useTheme();
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const translateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
+
+  // Load user data from AsyncStorage
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userDataString = await AsyncStorage.getItem('user_data');
+        if (userDataString) {
+          const user = JSON.parse(userDataString);
+          setUserData(user);
+        }
+      } catch (error) {
+        console.error('Error loading user data:', error);
+      }
+    };
+    loadUserData();
+  }, []);
 
   useEffect(() => {
     Animated.spring(translateX, {
@@ -139,12 +161,12 @@ export default function Sidebar() {
 
       {/* SIDEBAR */}
       <Animated.View
-        style={[styles.sidebar, { transform: [{ translateX }], backgroundColor: colors.background.primary }]}
+        style={[styles.sidebar, { transform: [{ translateX }], backgroundColor: isDark ? '#E8E5D8' : '#000000' }]}
         {...sidebarPanResponder.panHandlers}
       >
         <SafeAreaView style={styles.safeArea}>
           {/* HEADER */}
-          <View style={styles.header}>
+          <View style={[styles.header, { borderBottomColor: isDark ? '#D0CDB8' : '#1A1A1A' }]}>
             <View style={styles.profileSection}>
               <View style={styles.profileImageContainer}>
                 <Image
@@ -157,13 +179,17 @@ export default function Sidebar() {
               </View>
 
               <View style={styles.profileInfo}>
-                <Text style={[styles.profileName, { color: colors.text.primary }]}>Arclighter</Text>
-                <Text style={[styles.profileEmail, { color: colors.text.grayLight }]}>xyz@ijk.com</Text>
+                <Text style={[styles.profileName, { color: isDark ? '#1A1A1A' : '#FFFFFF' }]}>
+                  {userData?.name || 'Arclighter'}
+                </Text>
+                <Text style={[styles.profileEmail, { color: isDark ? '#666666' : '#B0B0B0' }]}>
+                  {userData?.email || 'xyz@ijk.com'}
+                </Text>
               </View>
             </View>
 
             <Pressable style={styles.closeButton} onPress={closeSidebar}>
-              <Feather name="sidebar" size={36} color={colors.text.primary} />
+              <Feather name="sidebar" size={36} color={isDark ? '#1A1A1A' : '#FFFFFF'} />
             </Pressable>
           </View>
 
@@ -178,11 +204,11 @@ export default function Sidebar() {
                 onPress={() => navigate(item.path)}
                 style={({ pressed }) => [
                   styles.menuItem,
-                  pressed && [styles.menuItemPressed, { backgroundColor: colors.background.buttonHover }],
+                  pressed && [styles.menuItemPressed, { backgroundColor: isDark ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.1)' }],
                 ]}
               >
-                <Feather name={item.icon as any} size={24} color={colors.text.primary} />
-                <Text style={[styles.menuLabel, { color: colors.text.primary }]}>{item.label}</Text>
+                <Feather name={item.icon as any} size={24} color={isDark ? '#1A1A1A' : '#FFFFFF'} />
+                <Text style={[styles.menuLabel, { color: isDark ? '#1A1A1A' : '#FFFFFF' }]}>{item.label}</Text>
               </Pressable>
             ))}
 
@@ -199,8 +225,8 @@ export default function Sidebar() {
               onPress={handleLogout}
               style={({ pressed }) => [
                 styles.menuItem,
-                [styles.logoutItem, { borderTopColor: colors.border.light }],
-                pressed && [styles.menuItemPressed, { backgroundColor: colors.background.buttonHover }],
+                [styles.logoutItem, { borderTopColor: isDark ? '#D0CDB8' : '#1A1A1A' }],
+                pressed && [styles.menuItemPressed, { backgroundColor: isDark ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.1)' }],
               ]}
             >
               <Feather name="log-out" size={24} color={colors.special.logout} />
@@ -212,18 +238,18 @@ export default function Sidebar() {
           </ScrollView>
 
           {/* THEME TOGGLE */}
-          <View style={styles.footer}>
+          <View style={[styles.footer, { borderTopColor: isDark ? '#D0CDB8' : '#1A1A1A' }]}>
             <Feather
               name="sun"
               size={24}
-              color={isDark ? colors.special.gray : colors.special.yellow}
+              color={isDark ? colors.special.yellow : '#808080'}
             />
 
             <Pressable
               onPress={toggleTheme}
               style={[
                 styles.toggleSwitch,
-                { backgroundColor: isDark ? colors.special.grayLight : colors.special.grayDark },
+                { backgroundColor: isDark ? '#3C44A8' : '#3A3A3A' },
               ]}
             >
               <View
@@ -237,7 +263,7 @@ export default function Sidebar() {
             <Feather
               name="moon"
               size={24}
-              color={isDark ? colors.special.blueSky : colors.special.gray}
+              color={isDark ? '#1A1A1A' : '#60A5FA'}
             />
           </View>
         </SafeAreaView>
@@ -283,6 +309,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     flexDirection: "row",
     justifyContent: "space-between",
+    borderBottomWidth: 1,
   },
   profileSection: {
     flex: 1,
@@ -325,6 +352,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 16,
+    borderTopWidth: 1,
   },
 
   toggleSwitch: {
