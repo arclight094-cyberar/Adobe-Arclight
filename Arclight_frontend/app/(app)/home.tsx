@@ -3,11 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Navbar from "../../components/Navbar";
 import Loader from "../../components/Loader";
-import { Upload, Camera, Folder } from "lucide-react-native";
+import { Plus, Folder } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiService from "../../services/api";
+import { useTheme } from "../../context/ThemeContext";
   
 interface ActionButtonProps {
   icon: React.ReactNode;
@@ -16,11 +17,13 @@ interface ActionButtonProps {
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({ icon, title, onClick }) => {
+  const { colors } = useTheme();
+  
   return (
-    <TouchableOpacity onPress={onClick} style={styles.button}>
+    <TouchableOpacity onPress={onClick} style={[styles.button, { backgroundColor: colors.background.button }]}>
       <View style={styles.buttonInner}>
         <View style={styles.iconContainer}>{icon}</View>
-        <Text style={styles.buttonText}>{title}</Text>
+        <Text style={[styles.buttonText, { color: colors.text.cream }]}>{title}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -28,6 +31,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, title, onClick }) => 
 
 const Home: React.FC = () => {
   const [uploading, setUploading] = useState(false);
+  const { colors } = useTheme();
 
   // ===================== UPLOAD IMAGE AND CREATE PROJECT =====================
   const handleImageSelected = async (uri: string, source: 'gallery' | 'camera') => {
@@ -101,53 +105,53 @@ const Home: React.FC = () => {
   };
 
   // ===================== CAMERA =====================
-  const openCamera = async () => {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
+  // const openCamera = async () => {
+  //   const permission = await ImagePicker.requestCameraPermissionsAsync();
 
-    if (!permission.granted) {
-      Alert.alert("Permission Denied", "Camera access is required.");
-      return;
-    }
+  //   if (!permission.granted) {
+  //     Alert.alert("Permission Denied", "Camera access is required.");
+  //     return;
+  //   }
 
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: false,
-      quality: 1,
-    });
+  //   const result = await ImagePicker.launchCameraAsync({
+  //     allowsEditing: false,
+  //     quality: 1,
+  //   });
 
-    if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      console.log("Captured from Camera:", uri);
-      await handleImageSelected(uri, 'camera');
-    }
-  };
+  //   if (!result.canceled) {
+  //     const uri = result.assets[0].uri;
+  //     console.log("Captured from Camera:", uri);
+  //     await handleImageSelected(uri, 'camera');
+  //   }
+  // };
 
   // ===================== BUTTONS =====================
   const actionButtons = [
     {
-      icon: <Upload size={48} strokeWidth={2.5} color="#e8e5d8" />,
-      title: "UPLOAD\nFROM\nGALLERY",
+      icon: <Plus size={48} strokeWidth={2.5} color={colors.text.cream} />,
+      title: "NEW\nPROJECT",
       onClick: openGallery,
     },
+    // {
+    //   icon: <Camera size={48} strokeWidth={2.5} color={colors.text.cream} />,
+    //   title: "TAKE\nPHOTO",
+    //   onClick: openCamera,
+    // },
     {
-      icon: <Camera size={48} strokeWidth={2.5} color="#e8e5d8" />,
-      title: "TAKE\nPHOTO",
-      onClick: openCamera,
-    },
-    {
-      icon: <Folder size={48} strokeWidth={2.5} color="#e8e5d8" />,
+      icon: <Folder size={48} strokeWidth={2.5} color={colors.text.cream} />,
       title: "PROJECT\nGALLERY",
       onClick: () => router.push("/(app)/projects"),
     },
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background.cream }]}>
       <Navbar screenName="HOME" />
 
       {uploading && (
-        <View style={styles.uploadingOverlay}>
+        <View style={[styles.uploadingOverlay, { backgroundColor: colors.background.overlayLight }]}>
           <Loader size={120} />
-          <Text style={styles.uploadingText}>Uploading image...</Text>
+          <Text style={[styles.uploadingText, { color: colors.text.dark }]}>Uploading image...</Text>
         </View>
       )}
 
@@ -170,7 +174,6 @@ export default Home;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#e8e5d8",
   },
 
   mainContainer: {
@@ -185,7 +188,6 @@ const styles = StyleSheet.create({
     width: 280,
     height: 149,
     borderRadius: 28,
-    backgroundColor: "#1a1a1a",
     justifyContent: "center",
     paddingLeft: 37,
     marginBottom: 40,
@@ -205,7 +207,6 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: "#e8e5d8",
     fontSize: 16,
     lineHeight: 21,
     fontFamily: "geistmono",
@@ -216,7 +217,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(232, 229, 216, 0.9)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
   uploadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#1a1a1a',
     fontFamily: "geistmono",
   },
 });
