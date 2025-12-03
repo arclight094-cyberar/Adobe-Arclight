@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
+import { useTheme } from '../context/ThemeContext';
 import Animated, {
   useSharedValue,
   useAnimatedProps,
@@ -77,6 +78,7 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({ size = SIZE }) => {
   const scale = size / SIZE;
+  const { colors } = useTheme();
 
   // Keyframes for Ring A (large outer ring)
   const ringAKeyframes = [
@@ -141,7 +143,7 @@ const Loader: React.FC<LoaderProps> = ({ size = SIZE }) => {
           cx={120}
           cy={120}
           r={105}
-          stroke="#000000"
+          stroke={colors.loader.stroke1}
           keyframes={ringAKeyframes}
         />
         {/* Ring B - Small center ring */}
@@ -149,7 +151,7 @@ const Loader: React.FC<LoaderProps> = ({ size = SIZE }) => {
           cx={120}
           cy={120}
           r={35}
-          stroke="#7e7e7e"
+          stroke={colors.loader.stroke2}
           keyframes={ringBKeyframes}
         />
         {/* Ring C - Left ring */}
@@ -157,7 +159,7 @@ const Loader: React.FC<LoaderProps> = ({ size = SIZE }) => {
           cx={85}
           cy={120}
           r={70}
-          stroke="#686868"
+          stroke={colors.loader.stroke3}
           keyframes={ringCKeyframes}
         />
         {/* Ring D - Right ring */}
@@ -165,7 +167,7 @@ const Loader: React.FC<LoaderProps> = ({ size = SIZE }) => {
           cx={155}
           cy={120}
           r={70}
-          stroke="#000000"
+          stroke={colors.loader.stroke1}
           keyframes={ringDKeyframes}
         />
       </Svg>

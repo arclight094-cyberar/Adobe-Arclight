@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import Navbar from '../../components/Navbar';
+import { useTheme } from '../../context/ThemeContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -34,8 +35,8 @@ const initialProjects: Project[] = [
 export default function Projects() {
   const [searchQuery, setSearchQuery] = useState('');
   const [projects] = useState<Project[]>(initialProjects);
-
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const { colors } = useTheme();
 
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -58,7 +59,7 @@ export default function Projects() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background.cream }]} edges={['top']}>
       <Navbar screenName="PROJECTS" />
 
       {/* BACKDROP when menu open */}
@@ -71,12 +72,12 @@ export default function Projects() {
       )}
 
       {/* SEARCH BAR */}
-      <View style={styles.searchContainer}>
-        <Feather name="search" size={20} color="#999" style={styles.searchIcon} />
+      <View style={[styles.searchContainer, { backgroundColor: colors.input.background, borderColor: colors.input.border, borderWidth: 1 }]}>
+        <Feather name="search" size={20} color={colors.icon.default} style={styles.searchIcon} />
         <TextInput
-          style={styles.searchInput}
+          style={[styles.searchInput, { color: colors.text.primary }]}
           placeholder="Search"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.input.placeholder}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
@@ -101,12 +102,12 @@ export default function Projects() {
                   setOpenMenuId(openMenuId === project.id ? null : project.id)
                 }
               >
-                <Text style={styles.optionsText}>⋮</Text>
+                <Text style={[styles.optionsText, { color: colors.text.secondary }]}>⋮</Text>
               </TouchableOpacity>
 
               {/* Menu itself */}
               {openMenuId === project.id && (
-                <View style={styles.optionsMenu}>
+                <View style={[styles.optionsMenu, { backgroundColor: colors.background.secondary }]}>
                   <TouchableOpacity
                     style={styles.optionItem}
                     onPress={() => {
@@ -114,17 +115,17 @@ export default function Projects() {
                       handleRename(project.id);
                     }}
                   >
-                    <Text style={styles.optionText}>Rename</Text>
+                    <Text style={[styles.optionText, { color: colors.text.primary }]}>Rename</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={[styles.optionItem, styles.lastOptionItem]}
+                    style={[styles.optionItem, [styles.lastOptionItem, { borderTopColor: colors.border.primary }]]}
                     onPress={() => {
                       setOpenMenuId(null);
                       handleDelete(project.id);
                     }}
                   >
-                    <Text style={[styles.optionText, { color: '#ff4444' }]}>
+                    <Text style={[styles.optionText, { color: colors.status.error }]}>
                       Delete
                     </Text>
                   </TouchableOpacity>
@@ -133,9 +134,9 @@ export default function Projects() {
 
               {/* MAIN CARD */}
               <TouchableOpacity activeOpacity={0.8}>
-                <View style={styles.projectThumbnail} />
-                <Text style={styles.projectName}>{project.name}</Text>
-                <Text style={styles.projectDate}>{project.date}</Text>
+                <View style={[styles.projectThumbnail, { backgroundColor: colors.card.thumbnail }]} />
+                <Text style={[styles.projectName, { color: colors.text.primary }]}>{project.name}</Text>
+                <Text style={[styles.projectDate, { color: colors.text.secondary }]}>{project.date}</Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -148,7 +149,6 @@ export default function Projects() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8E4DC',
   },
 
   /* BACKDROP */
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2C2C2C',
     borderRadius: 24,
     marginHorizontal: 20,
     marginVertical: 16,
@@ -176,7 +175,6 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#FFF',
     padding: 0,
     fontFamily: 'geistmono',
   },
@@ -205,21 +203,18 @@ const styles = StyleSheet.create({
   projectThumbnail: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: '#2C2C2C',
-    borderRadius: 24,
+    borderRadius: 16,
     marginBottom: 8,
   },
   projectName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
     textAlign: 'center',
     marginBottom: 2,
     fontFamily: 'geistmono',
   },
   projectDate: {
     fontSize: 12,
-    color: '#666',
     textAlign: 'center',
     fontFamily: 'geistmono',
   },
@@ -234,14 +229,12 @@ const styles = StyleSheet.create({
   },
   optionsText: {
     fontSize: 24,
-    color: '#958989ff',
     fontFamily: 'geistmono',
   },
   optionsMenu: {
     position: 'absolute',
     top: 28,
     right: 4,
-    backgroundColor: '#040404ff',
     borderRadius: 10,
     paddingVertical: 6,
     width: 120,
@@ -253,10 +246,8 @@ const styles = StyleSheet.create({
   },
   lastOptionItem: {
     borderTopWidth: 1,
-    borderTopColor: '#333',
   },
   optionText: {
-    color: '#fff',
     fontSize: 14,
     fontFamily: 'geistmono',
   },

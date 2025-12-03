@@ -30,7 +30,7 @@ const SWIPE_THRESHOLD = 45;
 export default function Sidebar() {
   const router = useRouter();
   const { isOpen, openSidebar, closeSidebar } = useSidebar();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark, toggleTheme, colors } = useTheme();
 
   const translateX = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
 
@@ -130,16 +130,16 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Backdrop overlay */}
+      {/* OVERLAY */}
       {isOpen && (
         <TouchableWithoutFeedback onPress={closeSidebar}>
-          <View style={styles.overlay} />
+          <View style={[styles.overlay, { backgroundColor: colors.background.overlay }]} />
         </TouchableWithoutFeedback>
       )}
 
       {/* SIDEBAR */}
       <Animated.View
-        style={[styles.sidebar, { transform: [{ translateX }] }]}
+        style={[styles.sidebar, { transform: [{ translateX }], backgroundColor: colors.background.primary }]}
         {...sidebarPanResponder.panHandlers}
       >
         <SafeAreaView style={styles.safeArea}>
@@ -157,13 +157,13 @@ export default function Sidebar() {
               </View>
 
               <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>Arclighter</Text>
-                <Text style={styles.profileEmail}>xyz@ijk.com</Text>
+                <Text style={[styles.profileName, { color: colors.text.primary }]}>Arclighter</Text>
+                <Text style={[styles.profileEmail, { color: colors.text.grayLight }]}>xyz@ijk.com</Text>
               </View>
             </View>
 
             <Pressable style={styles.closeButton} onPress={closeSidebar}>
-              <Feather name="sidebar" size={36} color="white" />
+              <Feather name="sidebar" size={36} color={colors.text.primary} />
             </Pressable>
           </View>
 
@@ -178,18 +178,18 @@ export default function Sidebar() {
                 onPress={() => navigate(item.path)}
                 style={({ pressed }) => [
                   styles.menuItem,
-                  pressed && styles.menuItemPressed,
+                  pressed && [styles.menuItemPressed, { backgroundColor: colors.background.buttonHover }],
                 ]}
               >
-                <Feather name={item.icon as any} size={24} color="white" />
-                <Text style={styles.menuLabel}>{item.label}</Text>
+                <Feather name={item.icon as any} size={24} color={colors.text.primary} />
+                <Text style={[styles.menuLabel, { color: colors.text.primary }]}>{item.label}</Text>
               </Pressable>
             ))}
 
             {/* PREMIUM */}
             <Pressable style={styles.menuItem}>
-              <Crown size={24} color="#60A5FA" strokeWidth={2.5} />
-              <Text style={[styles.menuLabel, styles.premiumLabel]}>
+              <Crown size={24} color={colors.special.premium} strokeWidth={2.5} />
+              <Text style={[styles.menuLabel, { color: colors.special.premium }]}>
                 PREMIUM
               </Text>
             </Pressable>
@@ -199,12 +199,12 @@ export default function Sidebar() {
               onPress={handleLogout}
               style={({ pressed }) => [
                 styles.menuItem,
-                styles.logoutItem,
-                pressed && styles.menuItemPressed,
+                [styles.logoutItem, { borderTopColor: colors.border.light }],
+                pressed && [styles.menuItemPressed, { backgroundColor: colors.background.buttonHover }],
               ]}
             >
-              <Feather name="log-out" size={24} color="#EF4444" />
-              <Text style={[styles.menuLabel, styles.logoutLabel]}>
+              <Feather name="log-out" size={24} color={colors.special.logout} />
+              <Text style={[styles.menuLabel, { color: colors.special.logout }]}>
                 LOGOUT
               </Text>
             </Pressable>
@@ -216,14 +216,14 @@ export default function Sidebar() {
             <Feather
               name="sun"
               size={24}
-              color={isDark ? "#6B7280" : "#FBBF24"}
+              color={isDark ? colors.special.gray : colors.special.yellow}
             />
 
             <Pressable
               onPress={toggleTheme}
               style={[
                 styles.toggleSwitch,
-                isDark ? styles.toggleOn : styles.toggleOff,
+                { backgroundColor: isDark ? colors.special.grayLight : colors.special.grayDark },
               ]}
             >
               <View
@@ -237,7 +237,7 @@ export default function Sidebar() {
             <Feather
               name="moon"
               size={24}
-              color={isDark ? "#93C5FD" : "#6B7280"}
+              color={isDark ? colors.special.blueSky : colors.special.gray}
             />
           </View>
         </SafeAreaView>
@@ -259,7 +259,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0,0,0,0.5)",
     zIndex: 40,
   },
   sidebar: {
@@ -268,7 +267,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: SIDEBAR_WIDTH,
-    backgroundColor: "#000",
     borderTopRightRadius: 40,
     borderBottomRightRadius: 40,
     elevation: 10,
@@ -298,8 +296,8 @@ const styles = StyleSheet.create({
   },
   profileImage: { width: "100%", height: "100%" },
   profileInfo: { gap: 2 },
-  profileName: { fontSize: 20, fontWeight: "bold", color: "white", fontFamily: "geistmono" },
-  profileEmail: { fontSize: 12, color: "#9CA3AF", fontFamily: "geistmono" },
+  profileName: { fontSize: 20, fontWeight: "bold", fontFamily: "geistmono" },
+  profileEmail: { fontSize: 12, fontFamily: "geistmono" },
   closeButton: { padding: 6 },
 
   /* MENU */
@@ -312,17 +310,13 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   menuItemPressed: {
-    backgroundColor: "rgba(255,255,255,0.05)",
   },
-  menuLabel: { fontSize: 16, fontWeight: "600", color: "white", fontFamily: "geistmono" },
-  premiumLabel: { color: "#60A5FA" },
+  menuLabel: { fontSize: 16, fontWeight: "600", fontFamily: "geistmono" },
   logoutItem: {
     marginTop: 8,
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.1)",
     paddingTop: 20,
   },
-  logoutLabel: { color: "#EF4444" },
 
   /* FOOTER */
   footer: {
@@ -338,12 +332,6 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 16,
     justifyContent: "center",
-  },
-  toggleOn: {
-    backgroundColor: "#D1D5DB",
-  },
-  toggleOff: {
-    backgroundColor: "#374151",
   },
   toggleThumb: {
     width: 24,

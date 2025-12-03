@@ -2,138 +2,22 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import colorThemes from '../constants/colors.json';
 
 // ============================================================
 // TYPES
 // ============================================================
 type ThemeMode = 'light' | 'dark' | 'system';
 
-type Theme = {
-  // Background colors
-  background: string;
-  backgroundSecondary: string;
-  backgroundTertiary: string;
-  
-  // Text colors
-  text: string;
-  textSecondary: string;
-  textTertiary: string;
-  
-  // Border colors
-  border: string;
-  borderSecondary: string;
-  
-  // Button colors
-  primary: string;
-  primaryText: string;
-  
-  // Card colors
-  card: string;
-  cardBorder: string;
-  
-  // Input colors
-  input: string;
-  inputBorder: string;
-  inputPlaceholder: string;
-  
-  // Status colors
-  success: string;
-  error: string;
-  warning: string;
-  info: string;
-  
-  // Modal colors
-  modalBackground: string;
-  overlay: string;
-};
+// Dynamic theme type based on JSON structure
+type ColorTheme = typeof colorThemes.light;
 
 type ThemeContextType = {
-  theme: Theme;
+  colors: ColorTheme;
   themeMode: ThemeMode;
   isDark: boolean;
   setThemeMode: (mode: ThemeMode) => Promise<void>;
   toggleTheme: () => Promise<void>;
-};
-
-// ============================================================
-// THEME DEFINITIONS
-// ============================================================
-const lightTheme: Theme = {
-  // Backgrounds
-  background: '#FFFFFF',
-  backgroundSecondary: '#F5F5F5',
-  backgroundTertiary: '#EEECE5',
-  
-  // Text
-  text: '#1D1B20',
-  textSecondary: '#666666',
-  textTertiary: '#999999',
-  
-  // Borders
-  border: '#E0E0E0',
-  borderSecondary: '#D0CDB8',
-  
-  // Buttons
-  primary: '#222222',
-  primaryText: '#FFFFFF',
-  
-  // Cards
-  card: '#FFFFFF',
-  cardBorder: '#E0E0E0',
-  
-  // Inputs
-  input: '#F5F5F5',
-  inputBorder: '#E0E0E0',
-  inputPlaceholder: '#999999',
-  
-  // Status
-  success: '#4CAF50',
-  error: '#F44336',
-  warning: '#FF9800',
-  info: '#2196F3',
-  
-  // Modal
-  modalBackground: '#FFFFFF',
-  overlay: 'rgba(0, 0, 0, 0.5)',
-};
-
-const darkTheme: Theme = {
-  // Backgrounds
-  background: '#000000',
-  backgroundSecondary: '#141414',
-  backgroundTertiary: '#1C1C1C',
-  
-  // Text
-  text: '#FFFFFF',
-  textSecondary: '#B0B0B0',
-  textTertiary: '#808080',
-  
-  // Borders
-  border: '#2C2C2C',
-  borderSecondary: '#3A3A3A',
-  
-  // Buttons
-  primary: '#FFFFFF',
-  primaryText: '#000000',
-  
-  // Cards
-  card: '#1C1C1C',
-  cardBorder: '#2C2C2C',
-  
-  // Inputs
-  input: '#1C1C1C',
-  inputBorder: '#2C2C2C',
-  inputPlaceholder: '#666666',
-  
-  // Status
-  success: '#66BB6A',
-  error: '#EF5350',
-  warning: '#FFA726',
-  info: '#42A5F5',
-  
-  // Modal
-  modalBackground: '#1C1C1C',
-  overlay: 'rgba(0, 0, 0, 0.8)',
 };
 
 // ============================================================
@@ -157,7 +41,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     ? deviceColorScheme === 'dark' 
     : themeMode === 'dark';
 
-  const theme = isDark ? darkTheme : lightTheme;
+  const colors = isDark ? colorThemes.dark : colorThemes.light;
 
   // ============================================================
   // LOAD SAVED THEME PREFERENCE ON APP START
@@ -207,7 +91,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ThemeContext.Provider 
       value={{ 
-        theme, 
+        colors, 
         themeMode, 
         isDark, 
         setThemeMode, 
@@ -233,4 +117,4 @@ export const useTheme = () => {
 // ============================================================
 // EXPORT THEME TYPE FOR TYPESCRIPT
 // ============================================================
-export type { Theme, ThemeMode };
+export type { ColorTheme, ThemeMode };
