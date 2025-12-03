@@ -1,0 +1,109 @@
+ Arclight_backend/.gitignore                        |    24 [32m+[m
+ Arclight_backend/AI/gemini.js                      |   145 [32m+[m
+ .../AppDataRoamingnpmnode_modulesexpo-cli          |     0
+ Arclight_backend/GOOGLE_CLIENT_ID_FIX.md           |   113 [32m+[m
+ Arclight_backend/Inter-IIT-tech-Adobe-PS           |     1 [31m-[m
+ Arclight_backend/UPDATE_GOOGLE_CLIENT_ID.md        |   119 [32m+[m
+ Arclight_backend/app.js                            |    85 [32m+[m
+ Arclight_backend/config.js                         |     3 [32m+[m
+ Arclight_backend/config/cloudinary.js              |    10 [32m+[m
+ Arclight_backend/controllers/GauthController.js    |   130 [32m+[m
+ Arclight_backend/controllers/aiController.js       |   846 [32m++[m
+ Arclight_backend/controllers/authController.js     |   300 [32m+[m
+ Arclight_backend/controllers/geminiController.js   |   275 [32m+[m
+ Arclight_backend/controllers/imageController.js    |   340 [32m+[m
+ Arclight_backend/controllers/projectController.js  |   236 [32m+[m
+ Arclight_backend/controllers/settingsController.js |    57 [32m+[m
+ Arclight_backend/demo/1764702188678_snz0kj.jpeg    |   Bin [31m0[m -> [32m2326885[m bytes
+ Arclight_backend/demo/1764702309469_dt1ifj.jpeg    |   Bin [31m0[m -> [32m455942[m bytes
+ Arclight_backend/demo/1764702630487_bdwii.jpeg     |   Bin [31m0[m -> [32m3482048[m bytes
+ Arclight_backend/demo/1764703032652_voz9w7.jpeg    |   Bin [31m0[m -> [32m2326885[m bytes
+ Arclight_backend/demo/test.jpg                     |   Bin [31m0[m -> [32m70226[m bytes
+ Arclight_backend/middleware/auth.js                |    33 [32m+[m
+ Arclight_backend/middleware/upload.js              |   184 [32m+[m
+ Arclight_backend/models/Image.js                   |    56 [32m+[m
+ Arclight_backend/models/Project.js                 |    98 [32m+[m
+ Arclight_backend/models/User.js                    |    66 [32m+[m
+ Arclight_backend/package-lock.json                 |  3154 [32m+++++[m
+ Arclight_backend/package.json                      |    30 [32m+[m
+ .../readMeFiles/AI_CONTROLLER_DOCUMENTATION.md     |  1289 [32m++[m
+ .../readMeFiles/BACKGROUND_REMOVAL_README.md       |   502 [32m+[m
+ Arclight_backend/readMeFiles/FRONTEND_README.md    |  1190 [32m++[m
+ .../readMeFiles/PROJECT_CONTROLLER_README.md       |   877 [32m++[m
+ Arclight_backend/routes/aiRoutes.js                |    25 [32m+[m
+ Arclight_backend/routes/authRoutes.js              |    24 [32m+[m
+ Arclight_backend/routes/geminiRoutes.js            |    19 [32m+[m
+ Arclight_backend/routes/imageRoutes.js             |    23 [32m+[m
+ Arclight_backend/routes/projectRoutes.js           |    26 [32m+[m
+ Arclight_backend/routes/settingsRoutes.js          |    14 [32m+[m
+ Arclight_backend/server.js                         |    18 [32m+[m
+ Arclight_backend/utils/AppError.js                 |    11 [32m+[m
+ Arclight_backend/utils/catchAsync.js               |     7 [32m+[m
+ Arclight_backend/utils/emailService.js             |   195 [32m+[m
+ Arclight_backend/utils/globalErrorHandler.js       |   150 [32m+[m
+ Arclight_frontend                                  |     1 [31m-[m
+ Arclight_frontend/.gitignore                       |    43 [32m+[m
+ Arclight_frontend/.vscode/extensions.json          |     1 [32m+[m
+ Arclight_frontend/.vscode/settings.json            |     7 [32m+[m
+ Arclight_frontend/App.tsx                          |     7 [32m+[m
+ Arclight_frontend/app.json                         |    42 [32m+[m
+ Arclight_frontend/app/(app)/_layout.tsx            |    66 [32m+[m
+ Arclight_frontend/app/(app)/home.tsx               |   231 [32m+[m
+ Arclight_frontend/app/(app)/projects.tsx           |   264 [32m+[m
+ Arclight_frontend/app/(app)/settings.tsx           |   355 [32m+[m
+ Arclight_frontend/app/(app)/templates.tsx          |   878 [32m++[m
+ Arclight_frontend/app/(app)/workspace.tsx          |  1353 [32m++[m
+ Arclight_frontend/app/(auth)/_layout.tsx           |    32 [32m+[m
+ Arclight_frontend/app/(auth)/login.tsx             |   672 [32m+[m
+ Arclight_frontend/app/(auth)/signup.tsx            |   610 [32m+[m
+ Arclight_frontend/app/(auth)/verify-otp.tsx        |   337 [32m+[m
+ Arclight_frontend/app/_layout.tsx                  |   103 [32m+[m
+ Arclight_frontend/app/icons/expand.png             |   Bin [31m0[m -> [32m6204[m bytes
+ Arclight_frontend/app/icons/facebook.png           |   Bin [31m0[m -> [32m16039[m bytes
+ Arclight_frontend/app/icons/instagram.png          |   Bin [31m0[m -> [32m16180[m bytes
+ Arclight_frontend/app/icons/linkedin.png           |   Bin [31m0[m -> [32m11481[m bytes
+ Arclight_frontend/app/icons/pinterest.png          |   Bin [31m0[m -> [32m23930[m bytes
+ Arclight_frontend/app/icons/sidebar.png            |   Bin [31m0[m -> [32m6144[m bytes
+ Arclight_frontend/app/icons/youtube.png            |   Bin [31m0[m -> [32m8618[m bytes
+ Arclight_frontend/app/index.tsx                    |   493 [32m+[m
+ Arclight_frontend/assets/fonts/GeistMono-Black.ttf |   Bin [31m0[m -> [32m78308[m bytes
+ Arclight_frontend/assets/fonts/GeistMono-Bold.ttf  |   Bin [31m0[m -> [32m78304[m bytes
+ .../assets/fonts/GeistMono-ExtraBold.ttf           |   Bin [31m0[m -> [32m78264[m bytes
+ .../assets/fonts/GeistMono-ExtraLight.ttf          |   Bin [31m0[m -> [32m78372[m bytes
+ Arclight_frontend/assets/fonts/GeistMono-Light.ttf |   Bin [31m0[m -> [32m78288[m bytes
+ .../assets/fonts/GeistMono-Medium.ttf              |   Bin [31m0[m -> [32m78356[m bytes
+ .../assets/fonts/GeistMono-Regular.ttf             |   Bin [31m0[m -> [32m78232[m bytes
+ .../assets/fonts/GeistMono-SemiBold.ttf            |   Bin [31m0[m -> [32m78376[m bytes
+ Arclight_frontend/assets/fonts/GeistMono-Thin.ttf  |   Bin [31m0[m -> [32m78324[m bytes
+ Arclight_frontend/assets/fonts/geistmono.ttf       |   Bin [31m0[m -> [32m137804[m bytes
+ Arclight_frontend/assets/fonts/grift.otf           |   Bin [31m0[m -> [32m41268[m bytes
+ Arclight_frontend/assets/images/arclight_logo.svg  |    19 [32m+[m
+ Arclight_frontend/assets/images/react-logo.png     |   Bin [31m0[m -> [32m6341[m bytes
+ Arclight_frontend/babel.config.js                  |     7 [32m+[m
+ Arclight_frontend/build_output.txt                 |   355 [32m+[m
+ .../components/ArclightEngineButton.tsx            |    90 [32m+[m
+ .../components/ArclightEngineModal.tsx             |   402 [32m+[m
+ Arclight_frontend/components/FilterToolsMenu.tsx   |   493 [32m+[m
+ Arclight_frontend/components/LightingModal.tsx     |   396 [32m+[m
+ Arclight_frontend/components/Loader.tsx            |   184 [32m+[m
+ Arclight_frontend/components/Navbar.tsx            |    84 [32m+[m
+ Arclight_frontend/components/Sidebar.tsx           |   356 [32m+[m
+ Arclight_frontend/constants/api.ts                 |   122 [32m+[m
+ Arclight_frontend/constants/theme.ts               |    53 [32m+[m
+ Arclight_frontend/context/SideBarContext.tsx       |    31 [32m+[m
+ Arclight_frontend/context/ThemeContext.tsx         |   236 [32m+[m
+ Arclight_frontend/declarations.d.ts                |     6 [32m+[m
+ Arclight_frontend/eas.json                         |    20 [32m+[m
+ Arclight_frontend/eslint.config.js                 |    10 [32m+[m
+ Arclight_frontend/misc/NewAnimation.tsx            |   232 [32m+[m
+ Arclight_frontend/package-lock.json                | 13962 [32m+++++++++++++++++++[m
+ Arclight_frontend/package.json                     |    64 [32m+[m
+ Arclight_frontend/react-native.config.js           |     3 [32m+[m
+ Arclight_frontend/scripts/reset-project.js         |   112 [32m+[m
+ Arclight_frontend/services/api.ts                  |   593 [32m+[m
+ Arclight_frontend/tsconfig.json                    |    16 [32m+[m
+ Arclight_frontend/utils/brightness.ts              |    70 [32m+[m
+ Arclight_frontend/utils/contrast.ts                |    71 [32m+[m
+ Arclight_frontend/utils/filters.ts                 |    42 [32m+[m
+ Arclight_frontend/utils/googleAuth.ts              |    56 [32m+[m
+ Arclight_frontend/utils/saturations.ts             |    8

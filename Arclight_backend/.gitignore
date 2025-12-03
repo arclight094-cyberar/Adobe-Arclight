@@ -1,0 +1,24 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+*.log
+dist/
+config.env
+./config.env
+/generated/prisma
+
+# Python virtual environments
+**/venv/
+**/LYT_Torch/
+**/__pycache__/
+*.pyc
+*.pyo
+AI/Models
+
+# Uploaded images (local storage)
+image/
+uploads/
+
+# AI Model weights (large files)
+aiModels/lowLight/PyTorch/best_model_LOLv1.pth
